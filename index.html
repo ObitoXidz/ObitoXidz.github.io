@@ -3,94 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <script type="text/javascript" src="http://htmlfreecodes.com/codes/rain.js"></script>
-    <title>Hacked By D1K4</title>
+    <title>Phone Number Details Extractor</title>
+    <script src="https://cdn.jsdelivr.net/npm/libphonenumber-js@1.9.27/bundle/libphonenumber-max.js"></script>
     <style>
         body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 90vh;
-            margin: 0;
-            background-color: black;
+            flex-direction: column;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 400px;
+            text-align: center;
+        }
+        .title {
+            color: green;
+            font-weight: bold;
+        }
+        .result-box {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .result-box pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #0088cc;
             color: white;
-        }
-       .circle {
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 5px solid white;
-    box-shadow: 0 0 10px 5px gold; /* Adjust the values as needed */
-}
-        .circle img {
-            width: 100%;
-            height: auto;
-        }
-.text {
-    font-size: 20px;
-    color: purple;
-    margin-top: 25px;
-    text-shadow: 
-        0 0 5px white,
-        0 0 10px white,
-        0 0 10px white,
-        0 0 10px purple,
-        0 0 10px purple,
-        0 0 10px purple;
-    font-weight: bold;
-}
-.love-text {
-    font-size: 15px;
-    color: purple;
-    margin-top: 15px;
-    text-shadow: 
-        0 0 5px white,
-        0 0 10px white,
-        0 0 10px white,
-        0 0 10px purple,
-        0 0 10px purple,
-        0 0 10px purple;
-    font-weight: bold;
-}
-
-        .text-nama {
-    font-size: 20px;
-    color: purple;
-    margin-top: 20px;
-    text-shadow: 
-        0 0 5px white,
-        0 0 10px white,
-        0 0 10px white,
-        0 0 10px purple,
-        0 0 10px purple,
-        0 0 10px purple;
-    font-weight: bold;
-}
-        audio {
-            width: 300px;
-            margin-top: 50px;
-            overflow: hidden;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
             display: flex;
             justify-content: center;
             align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .chat-button:hover {
+            background-color: #0078b8;
         }
     </style>
 </head>
 <body>
-    <div class="circle">
-        <img src="https://telegra.ph/file/b20e747e866e3a0939807.jpg" alt="Hacked By D1K4">
+
+    <div class="container">
+        <div class="title">P H O N E C H E C K E R</div>
+        <h2>📞 Welcome to the Phone Number Details Extractor 📞</h2>
+        <p>Please enter the phone number below:</p>
+        <input type="text" id="phone_number" placeholder="Enter the phone number" />
+        <button onclick="trackNumber()">Track</button>
+        <div class="result-box" id="result-box"></div>
     </div>
-    <div class="text">Hacked By D1K4</div>
-    <div class="love-text">Jangan Mudah Percaya Dengan Orang Asing</div>
-    <div class="text-nama">- D1K4 -</div>
-    <div>
-        <audio autoplay="autoplay" controls="controls" src="https://d.top4top.io/m_2929w50821.mp3"></audio>
-        <script type="text/javascript" src="http://htmlfreecodes.com/codes/rain.js"></script>
-    </div>
+
+    <script>
+        function trackNumber() {
+            const phoneNumber = document.getElementById('phone_number').value;
+            const resultBox = document.getElementById('result-box');
+            resultBox.innerHTML = "";
+
+            try {
+                const number = libphonenumber.parsePhoneNumber(phoneNumber);
+                if (!number.isValid()) {
+                    throw new Error("Invalid phone number");
+                }
+                
+                const country_code = number.country;
+                const country_calling_code = number.countryCallingCode;
+                const formatted_number = number.formatInternational();
+                const national_number = number.formatNational();
+                const e164_format = number.format('E.164');
+                const rfc3966_format = number.format('RFC3966');
+
+                const details = {
+                    "Country Code": country_code,
+                    "Country Calling Code": country_calling_code,
+                    "Validity": "Valid",
+                    "Formatted Number": formatted_number,
+                    "National Number": national_number,
+                    "E164 Format": e164_format,
+                    "RFC3966 Format": rfc3966_format
+                };
+
+                let result = "<pre><strong>🌐 Phone Number Details 🌐:</strong>\n";
+                for (const [key, value] of Object.entries(details)) {
+                    result += `${key}: ${value}\n`;
+                }
+                result += "</pre>";
+                resultBox.innerHTML = result;
+
+            } catch (e) {
+                resultBox.innerHTML = "<pre>❌ Number could not be parsed: " + e.toString() + "</pre>";
+            }
+        }
+    </script>
+
 </body>
-</html>
+</html
